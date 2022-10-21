@@ -66,21 +66,21 @@ VERSION_NUMBER=${split_array[1]}
 # Compile wheels
 for PYVER in ${PYTHON_VERS[@]}; do
     PYBIN="/usr/local/opt/$PYVER/bin"
-    "${PYBIN}/pip3" install -r ./requirements.txt
-    PYTHONVER="$(basename $(dirname $PYBIN))"
-    BUILDDIR="$CURRDIR/gtsam_$PYTHONVER/gtsam_build"
+    PIP="${PYBIN}/pip${VERSION_NUMBER}"
+    ${PIP} install -r ./requirements.txt
+    BUILDDIR="$CURRDIR/gtsam/gtsam_build"
     mkdir -p $BUILDDIR
     cd $BUILDDIR
     export PATH=$PYBIN:$PYBIN:/usr/local/bin:$ORIGPATH
-    "${PYBIN}/pip3" install delocate
+    ${PIP} install delocate
 
-    PYTHON_EXECUTABLE=${PYBIN}/python3
+    PYTHON_EXECUTABLE=${PYBIN}/python${VERSION_NUMBER}
     #PYTHON_INCLUDE_DIR=$( find -L ${PYBIN}/../include/ -name Python.h -exec dirname {} \; )
 
     # echo ""
-    # echo "PYTHON_EXECUTABLE:${PYTHON_EXECUTABLE}"
-    # echo "PYTHON_INCLUDE_DIR:${PYTHON_INCLUDE_DIR}"
-    # echo "PYTHON_LIBRARY:${PYTHON_LIBRARY}"
+    echo "PYTHON_EXECUTABLE:${PYTHON_EXECUTABLE}"
+    echo "PYTHON_INCLUDE_DIR:${PYTHON_INCLUDE_DIR}"
+    echo "PYTHON_LIBRARY:${PYTHON_LIBRARY}"
     
     cmake $CURRDIR/gtsam -DCMAKE_BUILD_TYPE=Release \
         -DGTSAM_BUILD_TESTS=OFF -DGTSAM_BUILD_UNSTABLE=ON \
